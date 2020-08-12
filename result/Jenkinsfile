@@ -42,6 +42,7 @@ pipeline {
 
       post{
         always{
+          office365ConnectorSend webhookURL:"https://outlook.office.com/webhook/d7e57a03-28cd-4e67-ac98-d6fade5ef679@33d0cf59-4d7e-4112-aeaf-6a520949bd17/JenkinsCI/8a2a930e0a6a4e1ebafa98dbc8eb540b/9d6022fa-c1d6-4751-bf90-2d20ddd69469" message:"started ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"
           echo 'Fatto tutto. Benbrai..'
         }
       }

@@ -1,5 +1,5 @@
 FROM node:8.9-alpine
-# added just for pleasure
+
 RUN mkdir -p /app
 WORKDIR /app
 

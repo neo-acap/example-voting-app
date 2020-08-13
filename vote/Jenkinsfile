@@ -1,0 +1,47 @@
+pipeline {
+
+    agent{
+      docker{
+        image 'python'
+        args '-v $HOME/.m2:/root/.m2' }
+    }
+
+    stages{
+
+      stage("build"){
+
+        when{
+          changeset "**/vote/**"
+        }
+
+        steps{
+          echo 'building vote app'
+          dir('vote'){
+              sh 'pip install -i requirements.txt'
+          }
+        }
+      }
+
+        stage("test"){
+
+            when{
+              changeset "**/vote/**"
+            }
+
+            steps{
+                echo 'Running Unit Tets on result app'
+                dir('vote'){
+                  sh 'nosetests -v'
+                }
+            }
+        }
+
+
+      }
+
+      post{
+        always{
+          echo 'Fatto tutto pip. Benbrai..'
+        }
+      }
+}

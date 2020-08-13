@@ -1,2 +1,3 @@
 file di test
 editato in locale
+aggiunta riga

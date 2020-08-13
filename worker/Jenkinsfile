@@ -1,61 +1,41 @@
-pipeline {
-
-    agent any
-
-    tools{
-      maven 'maven 3.6.1'
-    }
+pipeline{
+    agent{
+        docker{
+            image 'maven:3.6.1-jdk-8-slim'
+            args '-v $HOME/.m2:/root/.m2' }
+        }
 
     stages{
-
-      stage("build"){
-
-        when{
-          changeset "**/worker/**"
-        }
-
-        steps{
-          echo 'Compiling worker app'
-            dir('worker'){
-              sh 'mvn compile'
-            }
-          }
-        }
-
-        stage(two){
-
-            when{
-              changeset "**/worker/**"
-            }
-
+        stage('build'){
             steps{
-                echo 'Running Unit Tets on worker app'
+                echo 'building worker app'
+                dir('worker'){
+                  sh 'mvn compile'
+                }
+            }
+        }
+        stage('test'){
+            steps{
+                echo 'running unit tests on worker app'
                 dir('worker'){
                   sh 'mvn clean test'
                 }
             }
         }
-
-        stage(three){
-
-            when{
-              branch 'master'
-              changeset "**/worker/**"
-            }
-
+        stage('package'){
             steps{
-                echo 'Packaging worker app'
+                echo 'packaging worker app into a jarfile'
                 dir('worker'){
-                  sh 'mvn package -DskipTests'
-                  archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
+                    sh 'mvn package -DskipTests'
+                    archiveArtifacts artifacts: '**/target/*.jar', fingerprint:true
                 }
             }
         }
-      }
+    }
 
-      post{
+    post{
         always{
-          echo 'Building multibranch pipeline for worker is completed..'
+            echo 'the job is complete'
         }
-      }
+    }
 }

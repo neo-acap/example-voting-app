@@ -16,7 +16,7 @@ pipeline {
 
         steps{
           echo 'building result app'
-          node --version
+          sh 'node --version'
             dir('result'){
               sh 'npm install'
             }
